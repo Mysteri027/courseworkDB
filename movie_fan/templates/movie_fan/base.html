@@ -16,9 +16,9 @@
 			<ul id="mainmenu" class="mainmenu">
 {% for m in menu %}
 	{% if not forloop.last %}
-			<li><a href="#">{{m.title}}</a></li>
+			<li><a href="{% url m.url_name %}">{{m.title}}</a></li>
 	{% else %}
-			<li class="last"><a href="#">{{m.title}}</a></li>
+			<li class="last"><a href="{% url m.url_name %}">{{m.title}}</a></li>
 	{% endif %}
 {% endfor %}
 			</ul>
@@ -32,11 +32,10 @@
 <!-- Sidebar слева -->
 	<td valign="top" class="left-chapters">
 	<ul id="leftchapters">
-		<li class="selected">Все категории</li>
-		<li><a href="#">Актрисы</a></li>
-		<li><a href="#">Певицы</a></li>
-		<li><a href="#">Спортсменки</a></li>
-		<li class="share">
+        <li class="selected">Фильмы по жанрам</li>
+        {% for g in genres %}
+             <li><a href="{% url g.url_name %}">{{g.title}}</a></li>
+        {% endfor %}
 		</li>
 	</ul>
 </td>
