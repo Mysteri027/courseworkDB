@@ -1,14 +1,5 @@
 import datetime
-
 from django.db import models
-
-
-class User(models.Model):
-    name = models.CharField(max_length=50)
-    password = models.CharField(max_length=50)
-    login = models.CharField(max_length=50)
-    email = models.CharField(max_length=50)
-    date_registration = models.DateField(default=datetime.date.today())
 
 
 class Director(models.Model):
@@ -37,3 +28,8 @@ class Review(models.Model):
     likes_count = models.IntegerField()
     dislikes_count = models.IntegerField()
     movie_id = models.ForeignKey(Movie, on_delete=models.CASCADE)
+
+
+class News(models.Model):
+    title = models.CharField(max_length=50)
+    text = models.CharField(max_length=255)
