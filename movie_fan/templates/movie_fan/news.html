@@ -1,0 +1,10 @@
+{% extends 'movie_fan/base.html' %}
+
+{% block content %}
+
+{% for n in news %}
+    <p>{{ n.title }}</p>
+    <p>{{ n.text }}</p>
+{% endfor %}
+
+{% endblock %}
