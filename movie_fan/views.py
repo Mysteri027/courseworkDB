@@ -1,19 +1,9 @@
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic import FormView, ListView, View
 from .models import *
-menu = [
-    {'title': 'Главная', 'url_name': 'main'},
-    {'title': 'Новости', 'url_name': 'news'},
-]
-
-genres = [
-    {'title': 'Боевик', 'url_name': 'thriller'},
-    {'title': 'Детектив', 'url_name': 'detective'},
-    {'title': 'Семейный', 'url_name': 'family'},
-    {'title': 'Комедия', 'url_name': 'comedy'},
-]
+from .utils import *
 
 
 class MainPageView(View):
@@ -32,6 +22,22 @@ class NewsPage(ListView):
     model = News
     template_name = 'movie_fan/news.html'
     context_object_name = 'news'
+    extra_context = {'title': 'Новости кино'}
+
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['menu'] = menu
+        context['genres'] = genres
+        return context
+
+
+class MoviesPage(ListView):
+    model = Movie
+    template_name = 'movie_fan/movies.html'
+    context_object_name = 'movies'
+    extra_context = {'title': 'Фильмы'}
+
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -59,6 +65,47 @@ class RegisterFormView(FormView):
 
     def form_invalid(self, form):
         return super(RegisterFormView, self).form_valid(form)
+
+
+
+def get_reviews(request, movies_id):
+    reviews = Review.objects.filter(movie_id=movies_id)
+    movie = Movie.objects.get(pk=movies_id)
+    reviews_count = Review.objects.filter(movie_id=movies_id).count()
+    context = {
+            "reviews": reviews,
+            "reviews_count": reviews_count,
+            "title": "Рецензии",
+            "menu": menu,
+            "genres": genres,
+            "movie": movie,
+        }
+    return render(request, "movie_fan/reviews.html", context=context)
+
+
+def add_like_review(request, review_id):
+    review = Review.objects.get(id=review_id)
+    review.likes_count += 1
+    review.save()
+    return HttpResponseRedirect('/reviews/' + str(review.movie_id.id))
+
+
+
+def add_dislike_review(request, review_id):
+    review = Review.objects.get(id=review_id)
+    review.dislikes_count += 1
+    review.save()
+    return HttpResponseRedirect('/reviews/' + str(review.movie_id.id))
+
+
+def add_review(request, movies_id):
+    if request.method == "POST":
+        review = Review()
+        review.text = request.POST.get('review_text')
+        review.likes_count = 0
+        review.dislikes_count = 0
+        review.save()
+        return HttpResponseRedirect('/reviews/' + str(review.movie_id.id))
 
 
 def news(request):

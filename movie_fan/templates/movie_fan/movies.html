@@ -1,0 +1,26 @@
+{% extends 'movie_fan/base.html' %}
+
+{% block content %}
+
+    <h1>{{ title }}</h1>
+<ol>
+{% for m in movies %}
+    <div class="film" style="background-color: #f5f5dc; font-size: 25px ">
+        <li><h2>{{ m.name }}</h2></li>
+        <p>Оценка - {{ m.mark }}</p>
+        <p>Рейтинг - {{ m.rating }}</p>
+        <p>Постер</p>
+        <img src= "{{ m.poster }}"></img>
+        <p>Год выхода - {{ m.production_year }}</p>
+        <p>Страна производства - {{ m.country }}</p>
+        <p>Жанр - {{ m.genre }}</p>
+        <p>Режиссёр - {{ m.director.full_name }}</p>
+        <p>Продюсер - {{ m.producer }}</p>
+
+    <button type="button"><a href="{% url 'reviews' m.id %}">Посмотреть отзывы</a></button>
+    </div>
+{% endfor %}
+</ol>
+
+
+{% endblock %}
