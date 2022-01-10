@@ -1,7 +1,11 @@
-from django.contrib.auth.forms import UserCreationForm
-from django.shortcuts import render
+from django.contrib.auth import logout
+from django.contrib.auth.views import LoginView
+from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
-from django.views.generic import FormView, ListView, View
+from django.urls import reverse_lazy
+from django.views.generic import ListView, View, CreateView
+
+from .forms import RegisterUserForm, LoginUserForm
 from .models import *
 from .utils import *
 
@@ -46,9 +50,9 @@ class MoviesPage(ListView):
         return context
 
 
-class RegisterFormView(FormView):
-    form_class = UserCreationForm
-    success_url = 'login/'
+class RegisterFormView(CreateView):
+    form_class = RegisterUserForm
+    success_url = reverse_lazy('login')
     extra_context = {'title': 'Регистрация'}
 
     template_name = 'movie_fan/register.html'
@@ -66,6 +70,18 @@ class RegisterFormView(FormView):
     def form_invalid(self, form):
         return super(RegisterFormView, self).form_valid(form)
 
+
+class LoginFormView(LoginView):
+    form_class = LoginUserForm
+    template_name = 'movie_fan/login.html'
+    success_url = reverse_lazy('news')
+    extra_context = {'title': 'Логин'}
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['menu'] = menu
+        context['genres'] = genres
+        return context
 
 
 def get_reviews(request, movies_id):
@@ -99,21 +115,19 @@ def add_dislike_review(request, review_id):
 
 
 def add_review(request, movies_id):
-    if request.method == "POST":
-        review = Review()
-        review.text = request.POST.get('review_text')
-        review.likes_count = 0
-        review.dislikes_count = 0
-        review.save()
-        return HttpResponseRedirect('/reviews/' + str(review.movie_id.id))
+    review = Review()
+    review.text = request.POST.get('review_text')
+    review.likes_count = 0
+    review.dislikes_count = 0
+    review.movie_id = Movie.objects.get(id=movies_id)
+    review.save()
+
+    return HttpResponseRedirect('/reviews/' + str(review.movie_id.id))
 
 
-def news(request):
-    return HttpResponse('<h1> Новости </h1>')
-
-
-def login(request):
-    return HttpResponse('<h1> Логин </h1>')
+def logout_user(request):
+    logout(request)
+    return redirect('login')
 
 
 def thriller(request):
