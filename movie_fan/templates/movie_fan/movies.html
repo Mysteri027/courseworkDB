@@ -10,7 +10,7 @@
         <p>Оценка - {{ m.mark }}</p>
         <p>Рейтинг - {{ m.rating }}</p>
         <p>Постер</p>
-        <img src= "{{ m.poster }}"></img>
+        <img src="{{ m.poster.url }}"/>
         <p>Год выхода - {{ m.production_year }}</p>
         <p>Страна производства - {{ m.country }}</p>
         <p>Жанр - {{ m.genre }}</p>

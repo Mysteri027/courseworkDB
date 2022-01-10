@@ -17,7 +17,7 @@ class MainPageView(View):
         context = {
             'title': 'Главная',
             'menu': menu,
-            'genres': genres,
+            'top_movies': set_top_movies(),
         }
         return render(request, 'movie_fan/index.html', context=context)
 
@@ -32,7 +32,7 @@ class NewsPage(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['menu'] = menu
-        context['genres'] = genres
+        context['top_movies'] = set_top_movies()
         return context
 
 
@@ -46,7 +46,7 @@ class MoviesPage(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['menu'] = menu
-        context['genres'] = genres
+        context['top_movies'] = set_top_movies()
         return context
 
 
@@ -60,7 +60,7 @@ class RegisterFormView(CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['menu'] = menu
-        context['genres'] = genres
+        context['top_movies'] = set_top_movies()
         return context
 
     def form_valid(self, form):
@@ -80,7 +80,7 @@ class LoginFormView(LoginView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['menu'] = menu
-        context['genres'] = genres
+        context['top_movies'] = set_top_movies()
         return context
 
 
@@ -93,7 +93,7 @@ def get_reviews(request, movies_id):
             "reviews_count": reviews_count,
             "title": "Рецензии",
             "menu": menu,
-            "genres": genres,
+            "top_movies": set_top_movies(),
             "movie": movie,
         }
     return render(request, "movie_fan/reviews.html", context=context)
@@ -130,17 +130,9 @@ def logout_user(request):
     return redirect('login')
 
 
-def thriller(request):
-    return HttpResponse('<h1> Боевик </h1>')
+def set_top_movies():
+    movies = Movie.objects.order_by('-rating')
+    return movies
 
 
-def detective(request):
-    return HttpResponse('<h1> Детектив </h1>')
 
-
-def family(request):
-    return HttpResponse('<h1> Семейные </h1>')
-
-
-def comedy(request):
-    return HttpResponse('<h1> Комедия </h1>')

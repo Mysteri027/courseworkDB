@@ -36,8 +36,8 @@
 	<td valign="top" class="left-chapters">
 	<ul id="leftchapters">
         <li class="selected">Фильмы по жанрам</li>
-        {% for g in genres %}
-             <li><a href="{% url g.url_name %}">{{g.title}}</a></li>
+        {% for tm in top_movies %}
+             <li>{{tm.name}}</li>
         {% endfor %}
 		</li>
 	</ul>

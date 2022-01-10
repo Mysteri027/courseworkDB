@@ -1,5 +1,7 @@
+from django.conf.urls.static import static
 from django.urls import path
 
+from coursework import settings
 from .views import *
 
 urlpatterns = [
@@ -14,11 +16,7 @@ urlpatterns = [
     path('add_like_review/<int:review_id>/', add_like_review, name='add_like_review'),
     path('add_dislike_review/<int:review_id>/', add_dislike_review, name='add_dislike_review'),
     path('add_review/<int:movies_id>/', add_review, name='add_review'),
-
-
-
-    path('thriller/', thriller, name='thriller'),
-    path('detective/', detective, name='detective'),
-    path('family/', family, name='family'),
-    path('comedy', comedy, name='comedy'),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
