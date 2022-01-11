@@ -2,6 +2,7 @@ menu = [
     {'title': 'Главная', 'url_name': 'main'},
     {'title': 'Новости', 'url_name': 'news'},
     {'title': 'Все фильмы', 'url_name': 'all_movies'},
+    {'title': 'Поиск', 'url_name': 'search'}
 ]
 
 genres = [

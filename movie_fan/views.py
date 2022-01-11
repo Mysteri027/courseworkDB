@@ -135,4 +135,53 @@ def set_top_movies():
     return movies
 
 
+def get_move_by_id(request, movie_id):
+    movie = Movie.objects.get(id=movie_id)
+    context = {
+        'title': f'{movie.name}',
+        'menu': menu,
+        'top_movies': set_top_movies(),
+        'movie': movie,
+    }
+    return render(request, "movie_fan/movie.html", context=context)
 
+
+def search(request):
+    context = {
+        'title': f'Поиск',
+        'menu': menu,
+        'top_movies': set_top_movies(),
+    }
+    return render(request, "movie_fan/search.html", context=context)
+
+
+def check_search_bar(request):
+    if request.method == 'GET':
+        search_input = request.GET["search_name"]
+
+        movie_names = Movie.objects.values_list('name', flat=True)
+        directors_names = Director.objects.values_list('full_name', flat=True)
+
+        if search_input in movie_names:
+            movie = Movie.objects.get(name=search_input)
+            context = {
+                'title': f'{movie.name}',
+                'menu': menu,
+                'top_movies': set_top_movies(),
+                'movie': movie,
+            }
+            return HttpResponseRedirect('/movie/' + str(movie.id))
+
+        elif search_input in directors_names:
+            movies = Movie.objects.filter(director__full_name=search_input)
+            print(movies)
+            context = {
+                'title': f'Фильмы режиссёра {search_input}',
+                'menu': menu,
+                'top_movies': set_top_movies(),
+                'movies': movies,
+            }
+            return render(request, "movie_fan/directors_movies.html", context=context)
+
+        else:
+            return HttpResponse('Error', content_type='text/html')

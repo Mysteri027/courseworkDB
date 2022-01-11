@@ -35,9 +35,9 @@
 <!-- Sidebar слева -->
 	<td valign="top" class="left-chapters">
 	<ul id="leftchapters">
-        <li class="selected">Фильмы по жанрам</li>
+        <li class="selected">Топ фильмов по рейтингу</li>
         {% for tm in top_movies %}
-             <li>{{tm.name}}</li>
+            <a href="{% url 'one_movie' tm.id%}" style="text-decoration: none; color: black">{{ tm.name }}</a>
         {% endfor %}
 		</li>
 	</ul>
@@ -58,4 +58,5 @@
 </td></tr>
 </table>
 </body>
+{% block add_script %} {% endblock %}
 </html>

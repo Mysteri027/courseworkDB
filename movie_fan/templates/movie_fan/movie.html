@@ -1,0 +1,16 @@
+{% extends 'movie_fan/base.html' %}
+{% block content %}
+<h1>{{ title }}</h1>
+
+<div class="film" style="background-color: #f5f5dc; font-size: 25px; margin: 20px 50% 20px 20px">
+    <li><h2>{{ movie.name }}</h2></li>
+    <p>Рейтинг - {{ movie.rating }}</p>
+    <p>Постер</p>
+    <img src="{{ movie.poster.url }}"/>
+    <p>Год выхода - {{ movie.production_year }}</p>
+    <p>Страна производства - {{ movie.country }}</p>
+    <p>Жанр - {{ movie.genre }}</p>
+    <p>Режиссёр - {{ movie.director.full_name }}</p>
+    <p>Продюсер - {{ movie.producer }}</p>
+</div>
+{% endblock %}

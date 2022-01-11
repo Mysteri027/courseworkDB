@@ -11,6 +11,9 @@ urlpatterns = [
     path('login/', LoginFormView.as_view(), name='login'),
     path('logout/', logout_user, name='logout'),
     path('movies/',MoviesPage.as_view(), name='all_movies'),
+    path('movie/<int:movie_id>/', get_move_by_id, name='one_movie'),
+    path('search/', search, name='search'),
+    path('check_search_bar/', check_search_bar, name='check_search_bar'),
 
     path('reviews/<int:movies_id>/', get_reviews, name='reviews'),
     path('add_like_review/<int:review_id>/', add_like_review, name='add_like_review'),
